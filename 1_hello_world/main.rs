@@ -5,5 +5,6 @@
 */
 
 fn main() {
+    // the '!' denotes a Rust macro
     println!("Hello, World!");
 }
