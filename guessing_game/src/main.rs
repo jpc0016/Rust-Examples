@@ -6,20 +6,46 @@
 
 // standard input/output library.  io library comes from the std library, hence the '::'
 use std::io;
+use std::cmp::Ordering;
+use rand::Rng;
 
 fn main() {
     println!("Guess the number!");
 
-    println!("Please input your guess.");
+    let secret_number = rand::thread_rng().gen_range(1,101);
+
+    println!("The secret number is {}.", secret_number);
+
+    loop {
+        println!("Please input your guess.");
 
     /* create place to store user input
     'let' keyword is used to create a variable
     'mut' makes a variable mutable, meaning they are allowed to change
     String::new() creates a new empty string that is assigned to guess
     */
-    let mut guess = String::new();
+        let mut guess = String::new();
 
-    io::stdin().read_line(&mut guess).expect("Failed to read line");
+        // .expect() raises a message when an Err type is returned in .read_line()
+        io::stdin().read_line(&mut guess)
+                .expect("Failed to read line");
 
-    println!("You guessed: {}", guess);
+                let guess: u32 = guess.trim().parse()
+                .expect("Please type a number!");
+
+                println!("You guessed: {}", guess);
+
+        // Routine to compare contents in `secret_number` with `guess`
+        match guess.cmp(&secret_number) {
+            Ordering::Less => println!("Too small!"),
+            Ordering::Greater => println!("Too large!"),
+            Ordering::Equal => println!("You Win!"),
+        }
+    }
+
+    // let x = 5;
+    // let y = 10;
+    // println!("\nThe numbers are {} and {}", x, y);
+
+
 }
