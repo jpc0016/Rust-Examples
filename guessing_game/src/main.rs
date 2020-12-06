@@ -14,7 +14,8 @@ fn main() {
 
     let secret_number = rand::thread_rng().gen_range(1,101);
 
-    println!("The secret number is {}.", secret_number);
+    // Remove secret_number print statement
+    // println!("The secret number is {}.", secret_number);
 
     loop {
         println!("Please input your guess.");
@@ -30,8 +31,15 @@ fn main() {
         io::stdin().read_line(&mut guess)
                 .expect("Failed to read line");
 
-                let guess: u32 = guess.trim().parse()
-                .expect("Please type a number!");
+        // change `expect()` statement to `match{}` expression to handle errors instead of
+        // crashing the program
+        let guess: u32 = match guess.trim().parse() {
+            // parse() returns Result type which is enum of either 'Ok" or 'Err'
+            Ok(num)=>num,
+            Err(_)=>continue,
+
+        };
+                //.expect("Please type a number!");
 
                 println!("You guessed: {}", guess);
 
@@ -39,7 +47,11 @@ fn main() {
         match guess.cmp(&secret_number) {
             Ordering::Less => println!("Too small!"),
             Ordering::Greater => println!("Too large!"),
-            Ordering::Equal => println!("You Win!"),
+            Ordering::Equal => {
+                        // Break out of program when victory condition met
+                                println!("You Win!");
+                                break;
+                                }
         }
     }
 
